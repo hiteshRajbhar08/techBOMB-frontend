@@ -3,6 +3,7 @@ import {
   cartAddItem,
   cartAddItemError,
   cartAddItemRequest,
+  cartRemoveItem,
 } from '../slices/cartSlice';
 
 // add to cart
@@ -36,4 +37,11 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
       )
     );
   }
+};
+
+// remove items from cart
+export const removeFromCart = (id) => (dispatch, getState) => {
+  dispatch(cartRemoveItem(id));
+
+  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };

@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { addToCart } from '../redux/actions/cartAction';
+import { addToCart, removeFromCart } from '../redux/actions/cartAction';
 
 const CartPage = () => {
   const { id: productId } = useParams();
@@ -30,7 +30,9 @@ const CartPage = () => {
     }
   }, [dispatch, productId, qty]);
 
-  const removeFromCartHandler = (id) => {};
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCart(id));
+  };
 
   const checkoutHandler = () => {
     navigate('/login?redirect=shipping');
