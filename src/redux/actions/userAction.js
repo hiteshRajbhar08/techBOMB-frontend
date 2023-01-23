@@ -54,3 +54,40 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('userInfo');
   dispatch(removeUserInfo());
 };
+
+// register user
+export const registerUser = (name, email, password) => async (dispatch) => {
+  try {
+    dispatch(
+      showNotification({
+        status: 'pending',
+        title: 'Sending...',
+        message: 'Sending register',
+      })
+    );
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const { data } = await axios.post(
+      `/api/users`,
+      { name, email, password },
+      config
+    );
+
+    dispatch(getUserInfo(data));
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch(
+      showNotification({
+        status: 'error',
+        title: 'Registration Error!',
+        message:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    );
+  }
+};

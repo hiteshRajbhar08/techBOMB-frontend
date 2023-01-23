@@ -5,11 +5,14 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useState, useEffect } from 'react';
 import FormContainer from '../components/FormContainer';
-import { loginUser } from '../redux/actions/userAction';
+import { registerUser } from '../redux/actions/userAction';
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -29,20 +32,34 @@ const LoginPage = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    dispatch(loginUser(email, password));
+    if (password !== confirmPassword) {
+      setMessage('password do not match');
+    } else {
+      dispatch(registerUser(name, email, password));
+    }
   };
 
   return (
     <FormContainer>
-      <h1 className="text-center">Sign In</h1>
+      <h1 className="text-center">Sign Up</h1>
       {notification.status === 'pending' ? (
         <Loader />
       ) : (
         <div>
+          {message && <Message variant="danger">{message}</Message>}
           {notification.status === 'error' && (
             <Message variant="danger">{notification.message}</Message>
           )}
           <Form onSubmit={submitHandler}>
+            <Form.Group controlId="name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="name"
+                placeholder="Enter name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
             <Form.Group controlId="email">
               <Form.Label>Email Address</Form.Label>
               <Form.Control
@@ -61,19 +78,26 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               ></Form.Control>
             </Form.Group>
+            <Form.Group controlId="confirmPassword">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
             <div className="d-grid mt-3">
               <Button type="submit" variant="primary">
-                Sign In
+                Register
               </Button>
             </div>
           </Form>
           <Row className="py-3">
             <Col>
-              New Customer?{' '}
-              <Link
-                to={redirect ? `/register?redirect=${redirect}` : '/register'}
-              >
-                Register
+              Have an Account?{' '}
+              <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+                Login
               </Link>
             </Col>
           </Row>
@@ -83,4 +107,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
