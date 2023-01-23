@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { showNotification } from '../slices/uiSlice';
-import { getUserInfo, removeUserInfo } from '../slices/userSlice';
+import {
+  getUserDetailsError,
+  getUserDetailsInfo,
+  getUserDetailsRequest,
+  getUserInfo,
+  removeUserInfo,
+} from '../slices/userSlice';
 
 // login user
 export const loginUser = (email, password) => async (dispatch) => {
@@ -88,6 +94,33 @@ export const registerUser = (name, email, password) => async (dispatch) => {
             ? error.response.data.message
             : error.message,
       })
+    );
+  }
+};
+
+// get user details
+export const getUserDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(getUserDetailsRequest());
+
+    const { userInfo } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/${id}`, config);
+    dispatch(getUserDetailsInfo(data));
+  } catch (error) {
+    dispatch(
+      getUserDetailsError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
     );
   }
 };

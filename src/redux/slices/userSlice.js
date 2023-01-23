@@ -8,6 +8,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     userInfo: userInfoFromStorage,
+    userDetails: {},
+    userDetailsStatus: '',
+    userDetailsMessage: '',
   },
   reducers: {
     getUserInfo: (state, action) => {
@@ -16,8 +19,26 @@ const userSlice = createSlice({
     removeUserInfo: (state, action) => {
       state.userInfo = null;
     },
+    getUserDetailsRequest: (state) => {
+      state.userDetailsStatus = 'pending';
+    },
+    getUserDetailsError: (state, action) => {
+      state.userDetailsMessage = action.payload;
+      state.userDetailsStatus = 'error';
+    },
+    getUserDetailsInfo: (state, action) => {
+      state.userDetails = action.payload;
+      state.userDetailsMessage = '';
+      state.userDetailsStatus = 'success';
+    },
   },
 });
 
-export const { getUserInfo, removeUserInfo } = userSlice.actions;
+export const {
+  getUserInfo,
+  removeUserInfo,
+  getUserDetailsInfo,
+  getUserDetailsError,
+  getUserDetailsRequest,
+} = userSlice.actions;
 export default userSlice.reducer;
