@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useState, useEffect } from 'react';
-import { getUserDetails } from '../redux/actions/userAction';
+import { getUserDetails, updateUserProfile } from '../redux/actions/userAction';
 
 const ProfilePage = () => {
   const [name, setName] = useState('');
@@ -21,6 +21,8 @@ const ProfilePage = () => {
     userDetails: user,
     userDetailsStatus: status,
     userDetailsMessage: error,
+    userUpdateDetailsStatus,
+    userUpdateDetailsMessage,
   } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const ProfilePage = () => {
     if (password !== confirmPassword) {
       setMessage('password do not match');
     } else {
-      // dispatch(registerUser(name, email, password));
+      dispatch(updateUserProfile({ id: user._id, name, email, password }));
     }
   };
 
@@ -57,8 +59,11 @@ const ProfilePage = () => {
         ) : (
           <div>
             {message && <Message variant="danger">{error}</Message>}
-            {status === 'error' && (
-              <Message variant="danger">{message}</Message>
+            {userUpdateDetailsStatus === 'success' && (
+              <Message variant="success">Profile Updated</Message>
+            )}
+            {userUpdateDetailsStatus === 'error' && (
+              <Message variant="danger">{userUpdateDetailsMessage}</Message>
             )}
             <Form onSubmit={submitHandler}>
               <Form.Group controlId="name">

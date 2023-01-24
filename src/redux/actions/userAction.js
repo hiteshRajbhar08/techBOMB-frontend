@@ -6,6 +6,9 @@ import {
   getUserDetailsRequest,
   getUserInfo,
   removeUserInfo,
+  updateUserDetails,
+  updateUserDetailsError,
+  updateUserDetailsRequest,
 } from '../slices/userSlice';
 
 // login user
@@ -115,6 +118,31 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch(
       getUserDetailsError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
+// update user profile
+export const updateUserProfile = (user) => async (dispatch, getState) => {
+  try {
+    dispatch(updateUserDetailsRequest());
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/users/profile`, user, config);
+
+    dispatch(updateUserDetails(data));
+  } catch (error) {
+    dispatch(
+      updateUserDetailsError(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message

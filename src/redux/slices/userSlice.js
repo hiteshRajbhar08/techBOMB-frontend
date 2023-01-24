@@ -11,6 +11,8 @@ const userSlice = createSlice({
     userDetails: {},
     userDetailsStatus: '',
     userDetailsMessage: '',
+    userUpdateDetailsStatus: '',
+    userUpdateDetailsMessage: '',
   },
   reducers: {
     getUserInfo: (state, action) => {
@@ -31,6 +33,23 @@ const userSlice = createSlice({
       state.userDetailsMessage = '';
       state.userDetailsStatus = 'success';
     },
+    updateUserDetailsRequest: (state) => {
+      state.userUpdateDetailsStatus = 'pending';
+    },
+    updateUserDetailsError: (state, action) => {
+      state.userUpdateDetailsMessage = action.payload;
+      state.userUpdateDetailsStatus = 'error';
+    },
+    updateUserDetails: (state, action) => {
+      state.userDetails = action.payload;
+      state.userUpdateDetailsMessage = '';
+      state.userUpdateDetailsStatus = 'success';
+    },
+    updateResetUserDetails: (state) => {
+      state.userDetails = {};
+      state.userUpdateDetailsMessage = '';
+      state.userUpdateDetailsStatus = '';
+    },
   },
 });
 
@@ -40,5 +59,9 @@ export const {
   getUserDetailsInfo,
   getUserDetailsError,
   getUserDetailsRequest,
+  updateResetUserDetails,
+  updateUserDetails,
+  updateUserDetailsError,
+  updateUserDetailsRequest,
 } = userSlice.actions;
 export default userSlice.reducer;
