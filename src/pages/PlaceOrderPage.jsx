@@ -5,12 +5,19 @@ import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckOutSteps from '../components/CheckOutSteps';
+import { createOrder } from '../redux/actions/orderAction';
 
 const PlaceOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart);
+
+  const {
+    orders,
+    ordersStatus: status,
+    ordersMessage: message,
+  } = useSelector((state) => state.order);
 
   // calculate price
   const addDecimals = (num) => {
@@ -31,7 +38,25 @@ const PlaceOrderPage = () => {
     Number(taxPrice)
   ).toFixed(2);
 
-  const placeOrderHandler = () => {};
+  useEffect(() => {
+    if (status === 'success') {
+      navigate(`/order/${orders._id}`);
+    }
+  }, [navigate, status, orders]);
+
+  const placeOrderHandler = () => {
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
+  };
 
   return (
     <>
@@ -117,11 +142,11 @@ const PlaceOrderPage = () => {
                   <Col>${totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* <ListGroup.Item>
+              <ListGroup.Item>
                 {status === 'error' && (
                   <Message variant="danger">{message}</Message>
                 )}
-              </ListGroup.Item> */}
+              </ListGroup.Item>
               <ListGroup.Item>
                 <div className="d-grid">
                   <Button
