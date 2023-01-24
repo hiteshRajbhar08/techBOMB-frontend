@@ -6,6 +6,9 @@ import {
   getUserDetailsInfo,
   getUserDetailsRequest,
   getUserInfo,
+  getUsersList,
+  getUsersListError,
+  getUsersListRequest,
   removeUserInfo,
   updateResetUserDetails,
   updateUserDetails,
@@ -161,4 +164,28 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 // reset user details
 export const resetUpdateSuccess = () => async (dispatch) => {
   dispatch(updateResetUserDetails());
+};
+
+// list all users
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch(getUsersListRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/users`, config);
+
+    dispatch(getUsersList(data));
+  } catch (error) {
+    dispatch(
+      getUsersListError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
 };
