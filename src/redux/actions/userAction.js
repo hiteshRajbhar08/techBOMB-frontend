@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { orderResetGetMyorders } from '../slices/orderSlice';
 import { showNotification } from '../slices/uiSlice';
 import {
   getUserDetailsError,
@@ -62,7 +63,11 @@ export const loginUser = (email, password) => async (dispatch) => {
 // logout user
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('userInfo');
+  localStorage.removeItem('cartItems');
+  localStorage.removeItem('shippingAddress');
+  localStorage.removeItem('paymentMethod');
   dispatch(removeUserInfo());
+  dispatch(orderResetGetMyorders());
 };
 
 // register user
