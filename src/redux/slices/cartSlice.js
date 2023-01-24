@@ -4,10 +4,15 @@ const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
   : [];
 
+const cartAddressFromStorage = localStorage.getItem('shippingAddress')
+  ? JSON.parse(localStorage.getItem('shippingAddress'))
+  : {};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     cartItems: cartItemsFromStorage,
+    shippingAddress: cartAddressFromStorage,
     status: '',
     message: '',
   },
@@ -38,6 +43,9 @@ const cartSlice = createSlice({
         (x) => x.product !== action.payload
       );
     },
+    cartSaveAddress: (state, action) => {
+      state.shippingAddress = action.payload;
+    },
   },
 });
 
@@ -46,5 +54,6 @@ export const {
   cartAddItemError,
   cartAddItemRequest,
   cartRemoveItem,
+  cartSaveAddress,
 } = cartSlice.actions;
 export default cartSlice.reducer;

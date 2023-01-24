@@ -4,6 +4,7 @@ import {
   cartAddItemError,
   cartAddItemRequest,
   cartRemoveItem,
+  cartSaveAddress,
 } from '../slices/cartSlice';
 
 // add to cart
@@ -44,4 +45,10 @@ export const removeFromCart = (id) => (dispatch, getState) => {
   dispatch(cartRemoveItem(id));
 
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
+};
+
+// shipping address
+export const saveShippingAddress = (data) => (dispatch) => {
+  dispatch(cartSaveAddress(data));
+  localStorage.setItem('shippingAddress', JSON.stringify(data));
 };
