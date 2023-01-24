@@ -91,7 +91,7 @@ export const payOrder =
   };
 
 // list my orders
-export const ListMyorders = () => async (dispatch, getState) => {
+export const listMyorders = () => async (dispatch, getState) => {
   try {
     dispatch(orderGetMyordersRequest());
 
