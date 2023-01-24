@@ -10,6 +10,7 @@ import {
   getUsersListError,
   getUsersListRequest,
   removeUserInfo,
+  resetUsersList,
   updateResetUserDetails,
   updateUserDetails,
   updateUserDetailsError,
@@ -70,6 +71,7 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('shippingAddress');
   localStorage.removeItem('paymentMethod');
   dispatch(removeUserInfo());
+  dispatch(resetUsersList());
   dispatch(orderResetGetMyorders());
 };
 
