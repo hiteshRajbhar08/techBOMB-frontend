@@ -9,6 +9,9 @@ const orderSlice = createSlice({
     orderPay: null,
     ordersPayStatus: '',
     ordersPayMessage: '',
+    myorders: null,
+    myordersStatus: '',
+    myordersMessage: '',
   },
   reducers: {
     orderAddItemRequest: (state) => {
@@ -42,6 +45,22 @@ const orderSlice = createSlice({
       state.ordersPayStatus = '';
       state.ordersPayMessage = '';
     },
+    orderGetMyordersRequest: (state) => {
+      state.myordersStatus = 'pending';
+    },
+    orderGetMyordersError: (state, action) => {
+      state.myordersStatus = 'error';
+      state.myordersMessage = action.payload;
+    },
+    orderGetMyorders: (state, action) => {
+      state.myordersStatus = 'success';
+      state.myorders = action.payload;
+    },
+    orderResetGetMyorders: (state) => {
+      state.myordersStatus = '';
+      state.myordersMessage = '';
+      state.myorders = {};
+    },
   },
 });
 
@@ -54,5 +73,9 @@ export const {
   orderPayError,
   orderPayRequest,
   orderResetPay,
+  orderGetMyorders,
+  orderGetMyordersError,
+  orderGetMyordersRequest,
+  orderResetGetMyorders,
 } = orderSlice.actions;
 export default orderSlice.reducer;

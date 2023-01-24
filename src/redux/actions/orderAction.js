@@ -3,6 +3,9 @@ import {
   orderAddItem,
   orderAddItemError,
   orderAddItemRequest,
+  orderGetMyorders,
+  orderGetMyordersError,
+  orderGetMyordersRequest,
   orderPay,
   orderPayError,
   orderPayRequest,
@@ -86,3 +89,27 @@ export const payOrder =
       );
     }
   };
+
+// list my orders
+export const ListMyorders = () => async (dispatch, getState) => {
+  try {
+    dispatch(orderGetMyordersRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/orders/myorders`, config);
+
+    dispatch(orderGetMyorders(data));
+  } catch (error) {
+    dispatch(
+      orderGetMyordersError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};

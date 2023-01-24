@@ -22,7 +22,6 @@ const OrderPage = () => {
     orders: order,
     ordersStatus: status,
     ordersMessage: message,
-    orderPay,
     orderPayStatus,
   } = useSelector((state) => state.order);
 
