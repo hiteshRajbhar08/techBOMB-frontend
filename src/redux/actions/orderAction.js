@@ -3,6 +3,9 @@ import {
   orderAddItem,
   orderAddItemError,
   orderAddItemRequest,
+  orderPay,
+  orderPayError,
+  orderPayRequest,
 } from '../slices/orderSlice';
 
 // create order
@@ -53,3 +56,33 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
     );
   }
 };
+
+// pay order
+export const payOrder =
+  (orderId, paymentResult) => async (dispatch, getState) => {
+    try {
+      dispatch(orderPayRequest());
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getState().user.userInfo.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/pay`,
+        paymentResult,
+        config
+      );
+
+      dispatch(orderPay(data));
+    } catch (error) {
+      dispatch(
+        orderPayError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
