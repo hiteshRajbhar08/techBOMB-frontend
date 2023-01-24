@@ -5,6 +5,7 @@ import {
   cartAddItemRequest,
   cartRemoveItem,
   cartSaveAddress,
+  cartSavePaymentMethod,
 } from '../slices/cartSlice';
 
 // add to cart
@@ -51,4 +52,10 @@ export const removeFromCart = (id) => (dispatch, getState) => {
 export const saveShippingAddress = (data) => (dispatch) => {
   dispatch(cartSaveAddress(data));
   localStorage.setItem('shippingAddress', JSON.stringify(data));
+};
+
+// cart payment
+export const savePaymentMethod = (data) => (dispatch) => {
+  dispatch(cartSavePaymentMethod(data));
+  localStorage.setItem('paymentMethod', JSON.stringify(data));
 };
