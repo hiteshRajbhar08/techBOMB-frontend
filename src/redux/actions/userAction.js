@@ -6,6 +6,7 @@ import {
   getUserDetailsRequest,
   getUserInfo,
   removeUserInfo,
+  updateResetUserDetails,
   updateUserDetails,
   updateUserDetailsError,
   updateUserDetailsRequest,
@@ -140,6 +141,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const { data } = await axios.put(`/api/users/profile`, user, config);
 
     dispatch(updateUserDetails(data));
+    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     dispatch(
       updateUserDetailsError(
@@ -149,4 +151,9 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       )
     );
   }
+};
+
+// reset user details
+export const resetUpdateSuccess = () => async (dispatch) => {
+  dispatch(updateResetUserDetails());
 };

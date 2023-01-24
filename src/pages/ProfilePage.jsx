@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useState, useEffect } from 'react';
 import { getUserDetails, updateUserProfile } from '../redux/actions/userAction';
+import { updateResetUserDetails } from '../redux/slices/userSlice';
 
 const ProfilePage = () => {
   const [name, setName] = useState('');
@@ -45,6 +46,7 @@ const ProfilePage = () => {
       setMessage('password do not match');
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password }));
+      dispatch(updateResetUserDetails());
     }
   };
 
