@@ -15,6 +15,7 @@ import Loader from '../components/Loader';
 import { useEffect } from 'react';
 import { listProductDetails } from '../redux/actions/productAction';
 import { useState } from 'react';
+import Meta from '../components/Meta';
 
 const ProductPage = () => {
   const [qty, setQty] = useState(1);
@@ -44,6 +45,7 @@ const ProductPage = () => {
         <Message>{message}</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

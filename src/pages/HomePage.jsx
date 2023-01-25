@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
 import ProductCarousel from '../components/ProductCarousel';
@@ -25,7 +27,14 @@ const HomePage = () => {
 
   return (
     <>
-      {!keyword && <ProductCarousel />}
+      <Meta />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-dark">
+          Go Back
+        </Link>
+      )}
       <h1 className="text-center mt-2 fw-2xl">Latest Products</h1>
       {status === 'pending' ? (
         <Loader />
