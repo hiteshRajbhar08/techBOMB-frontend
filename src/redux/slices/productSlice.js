@@ -6,6 +6,8 @@ const productSlice = createSlice({
     product: { reviews: [] },
     status: '',
     message: '',
+    deleteStatus: '',
+    deleteMessage: '',
   },
   reducers: {
     getProductRequest: (state) => {
@@ -19,9 +21,26 @@ const productSlice = createSlice({
       state.product = action.payload.product;
       state.status = 'success';
     },
+    deleteProductRequest: (state) => {
+      state.deleteStatus = 'pending';
+    },
+    deleteProductError: (state, action) => {
+      state.deleteStatus = 'error';
+      state.deleteMessage = action.payload;
+    },
+    deleteProduct: (state) => {
+      state.deleteStatus = 'success';
+      state.deleteMessage = '';
+    },
   },
 });
 
-export const { getProduct, getProductError, getProductRequest } =
-  productSlice.actions;
+export const {
+  getProduct,
+  getProductError,
+  getProductRequest,
+  deleteProduct,
+  deleteProductError,
+  deleteProductRequest,
+} = productSlice.actions;
 export default productSlice.reducer;

@@ -1,5 +1,8 @@
 import axios from 'axios';
 import {
+  deleteProduct,
+  deleteProductError,
+  deleteProductRequest,
   getProduct,
   getProductError,
   getProductRequest,
@@ -53,5 +56,29 @@ export const listProductDetails = (id) => async (dispatch) => {
           : error.message
       )
     );
+  }
+};
+
+// delete product
+export const deleteProductById = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(deleteProductRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+
+    await axios.delete(`/api/products/${id}`, config);
+
+    dispatch(deleteProduct());
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch(deleteProductError(message));
   }
 };
