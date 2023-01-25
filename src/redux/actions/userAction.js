@@ -217,3 +217,28 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     dispatch(deleteUserError(message));
   }
 };
+
+// update user
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch(updateUserDetailsRequest());
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch(updateUserDetails(data));
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch(updateUserDetailsError(message));
+  }
+};
