@@ -2,6 +2,8 @@ import axios from 'axios';
 import { orderResetGetMyorders } from '../slices/orderSlice';
 import { showNotification } from '../slices/uiSlice';
 import {
+  deleteUserError,
+  deleteUserRequest,
   getUserDetailsError,
   getUserDetailsInfo,
   getUserDetailsRequest,
@@ -189,5 +191,29 @@ export const listUsers = () => async (dispatch, getState) => {
           : error.message
       )
     );
+  }
+};
+
+// delete users
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(deleteUserRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+
+    await axios.delete(`/api/users/${id}`, config);
+
+    dispatch(deleteUser());
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch(deleteUserError(message));
   }
 };

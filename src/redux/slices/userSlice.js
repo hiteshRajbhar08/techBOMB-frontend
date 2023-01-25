@@ -16,6 +16,8 @@ const userSlice = createSlice({
     usersList: [],
     usersListStatus: '',
     usersListMessage: '',
+    userDeleteStatus: '',
+    userDeleteMessage: '',
   },
   reducers: {
     getUserInfo: (state, action) => {
@@ -70,6 +72,17 @@ const userSlice = createSlice({
       state.usersListMessage = '';
       state.usersListStatus = '';
     },
+    deleteUserRequest: (state) => {
+      state.userDeleteStatus = 'pending';
+    },
+    deleteUserError: (state, action) => {
+      state.userDeleteMessage = action.payload;
+      state.userDeleteStatus = 'error';
+    },
+    deleteUser: (state) => {
+      state.userDeleteMessage = '';
+      state.userDeleteStatus = 'success';
+    },
   },
 });
 
@@ -87,5 +100,8 @@ export const {
   getUsersList,
   getUsersListError,
   getUsersListRequest,
+  deleteUser,
+  deleteUserError,
+  deleteUserRequest,
 } = userSlice.actions;
 export default userSlice.reducer;
