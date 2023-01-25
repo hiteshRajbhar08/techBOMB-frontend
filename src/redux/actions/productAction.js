@@ -65,6 +65,29 @@ export const listProductDetails = (id) => async (dispatch) => {
   }
 };
 
+// get top products
+export const getTopProducts = () => async (dispatch) => {
+  try {
+    dispatch(getProductListRequest());
+
+    const { data } = await axios.get(`/api/products/top`);
+
+    dispatch(
+      getProductList({
+        products: data || [],
+      })
+    );
+  } catch (error) {
+    dispatch(
+      getProductListError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
 // delete product
 export const deleteProductById = (id) => async (dispatch, getState) => {
   try {

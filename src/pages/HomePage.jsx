@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Product from '../components/Product';
+import ProductCarousel from '../components/ProductCarousel';
 import { listProducts } from '../redux/actions/productAction';
 
 const HomePage = () => {
@@ -24,7 +25,8 @@ const HomePage = () => {
 
   return (
     <>
-      <h1 className="text-center fw-2xl">Latest Products</h1>
+      {!keyword && <ProductCarousel />}
+      <h1 className="text-center mt-2 fw-2xl">Latest Products</h1>
       {status === 'pending' ? (
         <Loader />
       ) : status === 'error' ? (
