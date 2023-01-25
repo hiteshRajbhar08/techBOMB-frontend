@@ -9,6 +9,9 @@ import {
   orderPay,
   orderPayError,
   orderPayRequest,
+  ordersGetList,
+  ordersGetListError,
+  ordersGetListRequest,
 } from '../slices/orderSlice';
 
 // create order
@@ -106,6 +109,30 @@ export const listMyorders = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch(
       orderGetMyordersError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
+// get all orders
+export const ListOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch(ordersGetListRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/orders`, config);
+
+    dispatch(ordersGetList(data));
+  } catch (error) {
+    dispatch(
+      ordersGetListError(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
