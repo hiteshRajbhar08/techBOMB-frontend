@@ -8,6 +8,12 @@ const productSlice = createSlice({
     message: '',
     deleteStatus: '',
     deleteMessage: '',
+    createProductStatus: '',
+    createProductMessage: '',
+    createdProduct: { reviews: [] },
+    updateProductStatus: '',
+    updateProductMessage: '',
+    updatedProduct: { reviews: [] },
   },
   reducers: {
     getProductRequest: (state) => {
@@ -32,6 +38,47 @@ const productSlice = createSlice({
       state.deleteStatus = 'success';
       state.deleteMessage = '';
     },
+    createProductRequest: (state) => {
+      state.createProductStatus = 'pending';
+    },
+    createProductError: (state, action) => {
+      state.createProductStatus = 'error';
+      state.createProductMessage = action.payload;
+    },
+    createProductSuccess: (state, action) => {
+      state.createProductStatus = 'success';
+      state.createProductMessage = '';
+      state.createdProduct = action.payload;
+    },
+    createProductReset: (state) => {
+      state.createProductStatus = '';
+      state.createProductMessage = '';
+      state.createdProduct = { reviews: [] };
+    },
+    updateProductRequest: (state) => {
+      state.updateProductStatus = 'pending';
+    },
+    updateProductError: (state, action) => {
+      state.updateProductStatus = 'error';
+      state.updateProductMessage = action.payload;
+    },
+    updateProductSuccess: (state, action) => {
+      state.updateProductStatus = 'success';
+      state.updateProductMessage = '';
+      state.updatedProduct = action.payload;
+    },
+    updateProductReset: (state) => {
+      state.updateProductStatus = '';
+      state.updateProductMessage = '';
+      state.updatedProduct = { reviews: [] };
+    },
+    resetProductStatus: (state) => {
+      state.product = { reviews: [] };
+      state.status = '';
+      state.message = '';
+      state.deleteStatus = '';
+      state.deleteMessage = '';
+    },
   },
 });
 
@@ -42,5 +89,14 @@ export const {
   deleteProduct,
   deleteProductError,
   deleteProductRequest,
+  createProductError,
+  createProductRequest,
+  createProductReset,
+  createProductSuccess,
+  updateProductError,
+  updateProductRequest,
+  updateProductReset,
+  updateProductSuccess,
+  resetProductStatus,
 } = productSlice.actions;
 export default productSlice.reducer;

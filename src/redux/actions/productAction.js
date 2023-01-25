@@ -1,11 +1,17 @@
 import axios from 'axios';
 import {
+  createProductError,
+  createProductRequest,
+  createProductSuccess,
   deleteProduct,
   deleteProductError,
   deleteProductRequest,
   getProduct,
   getProductError,
   getProductRequest,
+  updateProductError,
+  updateProductRequest,
+  updateProductSuccess,
 } from '../slices/productSlice';
 import {
   getProductList,
@@ -80,5 +86,57 @@ export const deleteProductById = (id) => async (dispatch, getState) => {
         : error.message;
 
     dispatch(deleteProductError(message));
+  }
+};
+
+// create product
+export const createProduct = () => async (dispatch, getState) => {
+  try {
+    dispatch(createProductRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/products`, {}, config);
+
+    dispatch(createProductSuccess(data));
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch(createProductError(message));
+  }
+};
+
+// update product
+export const updateProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch(updateProductRequest());
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/products/${product._id}`,
+      product,
+      config
+    );
+    dispatch(updateProductSuccess(data));
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+
+    dispatch(updateProductError(message));
   }
 };

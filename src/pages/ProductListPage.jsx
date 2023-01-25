@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import {
+  createProduct,
   deleteProductById,
   listProducts,
 } from '../redux/actions/productAction';
@@ -52,9 +53,9 @@ const ProductListPage = () => {
     }
   };
 
-  //   const createProductHandler = () => {
-  //     dispatch(createProduct());
-  //   };
+  const createProductHandler = () => {
+    dispatch(createProduct());
+  };
 
   return (
     <>
@@ -64,7 +65,7 @@ const ProductListPage = () => {
             <h1>Products</h1>
           </Col>
           <Col className="text-right">
-            <Button className="my-3">
+            <Button className="my-3" onClick={createProductHandler}>
               <i className="fas fa-plus"></i> Create Product
             </Button>
           </Col>
