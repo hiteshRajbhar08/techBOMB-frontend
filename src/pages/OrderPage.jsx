@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { PayPalButton } from 'react-paypal-button-v2';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getOrderDetails, payOrder } from '../redux/actions/orderAction';
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from '../redux/actions/orderAction';
 import axios from 'axios';
-import { orderResetPay } from '../redux/slices/orderSlice';
+import {
+  orderResetPay,
+  orderToDeliveredReset,
+} from '../redux/slices/orderSlice';
 
 const OrderPage = () => {
   const [sdkReady, setSdkReady] = useState(false);
@@ -23,6 +30,7 @@ const OrderPage = () => {
     ordersStatus: status,
     ordersMessage: message,
     orderPayStatus,
+    orderToDeliveredStatus,
   } = useSelector((state) => state.order);
 
   const { userInfo } = useSelector((state) => state.user);
@@ -44,7 +52,12 @@ const OrderPage = () => {
       document.body.appendChild(script);
     };
 
-    if (!order || orderPayStatus === 'success') {
+    if (
+      !order ||
+      orderPayStatus === 'success' ||
+      orderToDeliveredStatus === 'success'
+    ) {
+      dispatch(orderToDeliveredReset());
       dispatch(orderResetPay());
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
@@ -54,10 +67,22 @@ const OrderPage = () => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, navigate, userInfo, order, orderPayStatus, orderId]);
+  }, [
+    dispatch,
+    navigate,
+    userInfo,
+    order,
+    orderPayStatus,
+    orderToDeliveredStatus,
+    orderId,
+  ]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   return (
@@ -186,6 +211,23 @@ const OrderPage = () => {
                       )}
                     </ListGroup.Item>
                   )}
+                  {orderToDeliveredStatus === 'pending' && <Loader />}
+                  {userInfo &&
+                    userInfo.isAdmin &&
+                    order.isPaid &&
+                    !order.isDelivered && (
+                      <ListGroup.Item>
+                        <div className="d-grid">
+                          <Button
+                            type="button"
+                            className="btn btn-block"
+                            onClick={deliverHandler}
+                          >
+                            Mark As Delivered
+                          </Button>
+                        </div>
+                      </ListGroup.Item>
+                    )}
                 </ListGroup>
               </Card>
             </Col>

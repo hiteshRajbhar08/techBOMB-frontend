@@ -15,6 +15,8 @@ const orderSlice = createSlice({
     ordersList: null,
     ordersListStatus: '',
     ordersListMessage: '',
+    orderToDeliveredStatus: '',
+    orderToDeliveredMessage: '',
   },
   reducers: {
     orderAddItemRequest: (state) => {
@@ -75,6 +77,20 @@ const orderSlice = createSlice({
       state.ordersListStatus = 'success';
       state.ordersList = action.payload;
     },
+    orderToDeliveredRequest: (state) => {
+      state.orderToDeliveredStatus = 'pending';
+    },
+    orderToDeliveredError: (state, action) => {
+      state.orderToDeliveredStatus = 'error';
+      state.orderToDeliveredMessage = action.payload;
+    },
+    orderToDelivered: (state) => {
+      state.orderToDeliveredStatus = 'success';
+    },
+    orderToDeliveredReset: (state) => {
+      state.orderToDeliveredStatus = '';
+      state.orderToDeliveredMessage = '';
+    },
   },
 });
 
@@ -94,5 +110,9 @@ export const {
   ordersGetList,
   ordersGetListError,
   ordersGetListRequest,
+  orderToDelivered,
+  orderToDeliveredError,
+  orderToDeliveredRequest,
+  orderToDeliveredReset,
 } = orderSlice.actions;
 export default orderSlice.reducer;

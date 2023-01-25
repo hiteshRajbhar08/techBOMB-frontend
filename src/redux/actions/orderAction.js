@@ -12,6 +12,9 @@ import {
   ordersGetList,
   ordersGetListError,
   ordersGetListRequest,
+  orderToDelivered,
+  orderToDeliveredError,
+  orderToDeliveredRequest,
 } from '../slices/orderSlice';
 
 // create order
@@ -133,6 +136,34 @@ export const ListOrders = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch(
       ordersGetListError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
+// order deliver
+export const deliverOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch(orderToDeliveredRequest());
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${getState().user.userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `/api/orders/${order._id}/deliver`,
+      {},
+      config
+    );
+
+    dispatch(orderToDelivered(data));
+  } catch (error) {
+    dispatch(
+      orderToDeliveredError(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
