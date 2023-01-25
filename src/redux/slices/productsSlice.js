@@ -4,6 +4,8 @@ const productsSlice = createSlice({
   name: 'products',
   initialState: {
     products: [],
+    pages: '',
+    page: '',
     status: '',
     message: '',
   },
@@ -17,6 +19,8 @@ const productsSlice = createSlice({
     },
     getProductList: (state, action) => {
       state.products = action.payload.products;
+      state.pages = action.payload.pages;
+      state.page = action.payload.page;
       state.status = 'success';
     },
   },

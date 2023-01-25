@@ -21,18 +21,16 @@ import {
 
 // fetch all products
 export const listProducts =
-  (keyword = '') =>
+  (keyword = '', pageNumber = 1) =>
   async (dispatch) => {
     try {
       dispatch(getProductListRequest());
 
-      const { data } = await axios.get(`/api/products?keyword=${keyword}`);
-
-      dispatch(
-        getProductList({
-          products: data || [],
-        })
+      const { data } = await axios.get(
+        `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
       );
+
+      dispatch(getProductList(data));
     } catch (error) {
       dispatch(
         getProductListError(

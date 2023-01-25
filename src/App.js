@@ -44,6 +44,11 @@ const App = () => {
             />
             <Route path="/admin/orderlist" element={<OrderListPage />} />
             <Route path="/search/:keyword" element={<HomePage />} />
+            <Route path="/page/:pageNumber" element={<HomePage />} />
+            <Route
+              path="/search/:keyword/page/:pageNumber"
+              element={<HomePage />}
+            />
             <Route path="/" element={<HomePage />} />
           </Routes>
         </Container>
