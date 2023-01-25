@@ -20,27 +20,29 @@ import {
 } from '../slices/productsSlice';
 
 // fetch all products
-export const listProducts = () => async (dispatch) => {
-  try {
-    dispatch(getProductListRequest());
+export const listProducts =
+  (keyword = '') =>
+  async (dispatch) => {
+    try {
+      dispatch(getProductListRequest());
 
-    const { data } = await axios.get('/api/products');
+      const { data } = await axios.get(`/api/products?keyword=${keyword}`);
 
-    dispatch(
-      getProductList({
-        products: data || [],
-      })
-    );
-  } catch (error) {
-    dispatch(
-      getProductListError(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      )
-    );
-  }
-};
+      dispatch(
+        getProductList({
+          products: data || [],
+        })
+      );
+    } catch (error) {
+      dispatch(
+        getProductListError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
 
 // get single product
 export const listProductDetails = (id) => async (dispatch) => {
